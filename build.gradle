@@ -29,13 +29,13 @@ docker {
     buildArgs(['DEPENDENCY': "dependency"])
 }
 
-group = 'springio'
+group = 'nikleft'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 bootJar {
-    baseName = 'gs-spring-boot-docker'
+    baseName = 'gcpproject'
     version =  '0.1.0'
 }
 
