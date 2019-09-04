@@ -3,13 +3,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
     }
 }
 
 plugins {
     id 'java'
+    id 'com.palantir.docker' version '0.19.2'
 }
 
 apply plugin: 'java'
@@ -23,10 +24,13 @@ task unpack(type: Copy) {
     from(zipTree(tasks.bootJar.outputs.files.singleFile))
     into("build/dependency")
 }
+
 docker {
-    name "${project.group}/${bootJar.baseName}"
-    copySpec.from(tasks.unpack.outputs).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
+    name "${project.group}/${jar.baseName}"
+    tags "latest"
+    files jar.archivePath
+    dockerfile file('Dockerfile')
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
 }
 
 group = 'nikleft'
@@ -36,7 +40,6 @@ targetCompatibility = 1.8
 
 bootJar {
     baseName = 'gcpproject'
-    version =  '0.1.0'
 }
 
 repositories {
