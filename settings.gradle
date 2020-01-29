@@ -1,2 +1,4 @@
 rootProject.name = 'gcpproject'
+include 'gateway'
+include 'config'
 
